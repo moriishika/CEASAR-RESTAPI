@@ -15,12 +15,18 @@ def index():
   if request.method == "POST":
     data = request.get_json()
     shiftNumber = int(data["shiftNumber"])
-    convertedText = convert_to_Caesar(data["text"])
-    result = encrypt_caesar(shiftNumber, convertedText)
-
-    response = {"status":"Success", "result" : result}
-
-    return make_response(jsonify(response))
+    method = data["method"]
+    if shiftNumber >= -26 and shiftNumber<= 26: 
+      convertedText = convert_to_Caesar(data["text"])
+      result = encrypt_caesar(shiftNumber, convertedText, method)
+  
+      response = {"status":"Success", "result" : result}
+  
+      return make_response(jsonify(response))
+    else:
+      response = {"status" : "Fail", "message" : "Unidentified error", "code" : 500}
+      return make_response(jsonify(response), 500)
+     
 
 
 app.run(host='0.0.0.0', port=81)
